@@ -47,9 +47,14 @@ public final class PlaylistQuerier {
         return ids
     }
     
-    public func appendPlaylistLog(playlistID: String,
-                                  date: Date = Date(),
-                                  locale: String = Locale.current.identifier) async throws {
+    /// 여기에서 rpc 메서드 호출...
+    /// 1. 이 플리를 스쿱한 날짜를 추가함
+    /// 2. 최근 스쿱한 데이터로 추가함
+    public func appendPlaylistLog(
+        playlistID: String,
+        date: Date = Date(),
+        locale: String = Locale.current.identifier
+    ) async throws {
         let appendLogRequest = PlaylistIDsRequest
             .sendPlaylistLog(id: playlistID, date: date, locale: locale)
             .getURLRequest(baseUrl: self.supabaseURL, supabaseKey: self.supabaseKey)
@@ -81,11 +86,13 @@ public final class PlaylistQuerier {
         return try await client.rpc( RPCFunctionType.getTotalSongsCount.rawValue)
             .convertToTable(type: Int.self)
     }
+    
     public func getTotalPlaylistsCount() async throws -> Int {
         guard let client = client else { throw PlaylistCachierError.clientKeyNotEntered }
         return try await client.rpc( RPCFunctionType.getTotalPlaylistsCount.rawValue)
             .convertToTable(type: Int.self)
     }
+    
     public func getIsShazamed(id: String) async throws -> Bool {
         guard let client = client else { throw PlaylistCachierError.clientKeyNotEntered }
         return try await client.rpc(
