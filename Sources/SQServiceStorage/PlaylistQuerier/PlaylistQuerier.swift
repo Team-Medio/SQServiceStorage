@@ -47,13 +47,17 @@ public final class PlaylistQuerier {
         return ids
     }
     
-    public func appendPlaylistLog(playlistID: String,
-                                  date: Date = Date(),
-                                  locale: String = Locale.current.identifier) async throws {
-        let appendLogRequest = PlaylistIDsRequest
-            .sendPlaylistLog(id: playlistID, date: date, locale: locale)
+    public func appendPlaylistLog(
+        playlistID: String,
+        date: Date = Date(),
+        locale: String = Locale.current.identifier,
+        channelID: String
+    ) async throws {
+
+        let logRequestDTO = SqoopsLogReqeust(id: playlistID, date: date, locale: locale, channelID: channelID)
+        let logURLRequest = SqoopsEndPoint.insert_log(logRequestDTO)
             .getURLRequest(baseUrl: self.supabaseURL, supabaseKey: self.supabaseKey)
-        guard let (_ , response) = try? await URLSession.shared.data(for: appendLogRequest),
+        guard let (_ , response) = try? await URLSession.shared.data(for: logURLRequest),
             (response as? HTTPURLResponse)?.statusCode == 200 else {
             throw NetworkingError.DataConvertFailed
         }

@@ -6,9 +6,8 @@
 //
 
 import Foundation
-
+enum Period:String { case week, month, year }
 enum PlaylistIDsRequest {
-    enum Period:String{ case week, month, year }
     case recent(limitcount:Int), most(period:Period,date:Date,limitcount:Int)
     case sendPlaylistLog(id:String, date:Date, locale: String)
     var httpMethod: String {
@@ -47,7 +46,7 @@ enum PlaylistIDsRequest {
             )
         }
     }
-    func getURLRequest(baseUrl:URL, supabaseKey:String) -> URLRequest {
+    func getURLRequest(baseUrl:URL, supabaseKey: String) -> URLRequest {
         let urlString = "\(baseUrl.absoluteString)\(self.endPoint)"
         var components = URLComponents(string: urlString)
         components?.queryItems = self.queryItems
@@ -60,7 +59,7 @@ enum PlaylistIDsRequest {
     }
 }
 
-fileprivate extension Date {
+extension Date {
     func convertToString()->String {
         let dateFormatter = ISO8601DateFormatter()
         dateFormatter.formatOptions = [.withInternetDateTime, .withTimeZone]
@@ -68,7 +67,7 @@ fileprivate extension Date {
     }
 }
 
-fileprivate struct SendPlaylistLogModel : Codable{
+fileprivate struct SendPlaylistLogModel : Codable {
     let id: String
     let date: String
     let locale: String

@@ -1,5 +1,5 @@
 //
-//  YTPlaylistMetaDataDTO.swift
+//  YTPlaylistHeadDTO.swift
 //  PlaylistCachier
 //
 //  Created by Greem on 11/21/24.
