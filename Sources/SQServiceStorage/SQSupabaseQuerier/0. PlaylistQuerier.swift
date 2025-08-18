@@ -22,44 +22,6 @@ public final class PlaylistQuerier {
         self.client = SupabaseClient(supabaseURL: supabaseURL, supabaseKey: supabaseKey)
         self.queryManager = QueryManager(client: client)
     }
-    
-    
-//    public func getIDsByAccessDateDESC(limit: Int = 10) async throws -> [YTPlaylistHeadDTO.ID] {
-//        let recentAccessDate = PlaylistIDsRequest
-//            .recent(limitcount: limit)
-//            .getURLRequest(baseUrl: supabaseURL, supabaseKey: supabaseKey)
-//        guard let (data, _) = try? await URLSession.shared.data(for: recentAccessDate),
-//          let ids = try? data.convertToTable(type: [String].self) else {
-//            throw NetworkingError.DataConvertFailed
-//        }
-//        return ids
-//    }
-    
-//    public func getIDsByWeeklyMostCountsDESC(date:Date,limit: Int = 10) async throws -> [YTPlaylistHeadDTO.ID] {
-//        let mostWeeklyRequest = PlaylistIDsRequest
-//            .most(period: .week, date: date, limitcount: limit)
-//            .getURLRequest(baseUrl: self.supabaseURL, supabaseKey: self.supabaseKey)
-//        guard let (data, _ ) = try? await URLSession.shared.data(for: mostWeeklyRequest),
-//              let ids = try? data.convertToTable(type: [String].self) else {
-//            throw NetworkingError.DataConvertFailed
-//        }
-//        return ids
-//    }
-    
-    public func appendPlaylistLog(
-        playlistID: String,
-        date: Date = Date(),
-        locale: String = Locale.current.identifier,
-        channelID: String
-    ) async throws {
-        let logRequestDTO = SqoopsLogReqeust(id: playlistID, date: date, locale: locale, channelID: channelID)
-        let logURLRequest = SqoopsEndPoint.insert_log(logRequestDTO)
-            .getURLRequest(baseUrl: self.supabaseURL, supabaseKey: self.supabaseKey)
-        guard let (_ , response) = try? await URLSession.shared.data(for: logURLRequest),
-            (response as? HTTPURLResponse)?.statusCode == 200 else {
-            throw NetworkingError.DataConvertFailed
-        }
-    }
 
     
     public func getPlaylistHead(id: String) async throws -> YTPlaylistHeadDTO {
@@ -88,6 +50,7 @@ public final class PlaylistQuerier {
         return try await client.rpc( RPCFunctionType.getTotalPlaylistsCount.rawValue)
             .convertToTable(type: Int.self)
     }
+    
     public func getIsShazamed(id: String) async throws -> Bool {
         guard let client = client else { throw PlaylistCachierError.clientKeyNotEntered }
         return try await client.rpc(
