@@ -45,6 +45,7 @@ public final class PlaylistQuerier {
         return try await client.rpc( RPCFunctionType.getTotalSongsCount.rawValue)
             .convertToTable(type: Int.self)
     }
+    
     public func getTotalPlaylistsCount() async throws -> Int {
         guard let client = client else { throw PlaylistCachierError.clientKeyNotEntered }
         return try await client.rpc( RPCFunctionType.getTotalPlaylistsCount.rawValue)
