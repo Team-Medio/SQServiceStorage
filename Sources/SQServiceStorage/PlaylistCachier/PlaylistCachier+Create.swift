@@ -89,11 +89,6 @@ extension PlaylistCachier {
                     data.body
                 )
             }
-            group.addTask {
-                try await client.metadataAccessDate
-                    .upsert(PlaylistHeadAccessDateTable(id: data.head.id))
-                    .execute()
-            }
             try await group.waitForAll()
         }
     }
