@@ -9,7 +9,7 @@ import Foundation
 
 
 enum SqoopsEndPoint {
-    case insert_log(SqoopsLogReqeust)
+    case insert_log(SqoopsLogRequest)
     
     var endPoint: String {
         switch self {
@@ -40,7 +40,7 @@ enum SqoopsEndPoint {
         var request = URLRequest(url: components!.url!)
         request.httpMethod = self.httpMethod.rawValue
         request.httpBody = self.httpBody
-        request.addValue(supabaseKey, forHTTPHeaderField: "Authorization")
+        request.addValue("Bearer \(supabaseKey)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         return request
     }

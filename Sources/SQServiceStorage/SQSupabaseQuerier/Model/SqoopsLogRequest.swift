@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SqoopsLogReqeust: Encodable {
+struct SqoopsLogRequest: Encodable {
     let id: String
     let date: Date
     let locale: String

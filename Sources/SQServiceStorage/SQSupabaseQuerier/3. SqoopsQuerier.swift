@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct SqoopsQurier {
+public struct SqoopsQuerier {
     private let supabaseURL: URL
     private let supabaseKey: String
     
@@ -22,7 +22,7 @@ public struct SqoopsQurier {
         locale: String = Locale.current.identifier,
         channelID: String
     ) async throws {
-        let logRequestDTO = SqoopsLogReqeust(id: playlistID, date: date, locale: locale, channelID: channelID)
+        let logRequestDTO = SqoopsLogRequest(id: playlistID, date: date, locale: locale, channelID: channelID)
         let logURLRequest = SqoopsEndPoint.insert_log(logRequestDTO)
             .getURLRequest(baseUrl: self.supabaseURL, supabaseKey: self.supabaseKey)
         guard let (_ , response) = try? await URLSession.shared.data(for: logURLRequest),

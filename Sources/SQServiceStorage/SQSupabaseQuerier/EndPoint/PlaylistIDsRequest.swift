@@ -55,7 +55,7 @@ enum PlaylistIDsRequest {
         var request = URLRequest(url: components!.url!)
         request.httpMethod = self.httpMethod
         request.httpBody = self.httpBody
-        request.addValue(supabaseKey, forHTTPHeaderField: "Authorization")
+        request.addValue("Bearer \(supabaseKey)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         return request
     }

@@ -49,7 +49,6 @@ public struct ChartsQuerier {
     public func getMostPlaylists(period: Period, date: Date, limitCount: Int)  async throws -> ChartPlaylistsResponse {
         let endPoint = ChartsEndPoint.get_most_playlists(period: period, date: date, limitcount: limitCount)
         let request = endPoint.getURLRequest(baseUrl: supabaseURL, supabaseKey: supabaseKey)
-        let (data, _ ) = try await URLSession.shared.data(for: request)
         guard let (data, _ ) = try? await URLSession.shared.data(for: request),
               let mostPlaylistsResponse = try? data.convertToTable(type: ChartPlaylistsResponse.self) else {
             throw NetworkingError.DataConvertFailed
