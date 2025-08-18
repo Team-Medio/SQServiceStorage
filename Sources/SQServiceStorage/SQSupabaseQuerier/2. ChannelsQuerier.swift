@@ -7,9 +7,13 @@
 
 import Foundation
 
-public final class ChannelsQuerier: SQSupabaseQuerier {
-    public override init(supabaseURL: URL, supabaseKey: String) {
-        super.init(supabaseURL: supabaseURL, supabaseKey: supabaseKey)
+public struct ChannelsQuerier {
+    private let supabaseURL: URL
+    private let supabaseKey: String
+    
+    public init(supabaseURL: URL, supabaseKey: String) {
+        self.supabaseURL = supabaseURL
+        self.supabaseKey = supabaseKey
     }
     
     public func getPlaylists(channelID: String, limitCount: Int) async throws -> ChannelPlaylistsResposne {

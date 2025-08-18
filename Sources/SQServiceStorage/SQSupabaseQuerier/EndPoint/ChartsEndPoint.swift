@@ -15,8 +15,8 @@ enum ChartsEndPoint {
     
     var endPoint: String {
         switch self {
-        case .get_recent_channels, .get_most_channels: return "/functions/v1/channels"
-        case .get_recent_playlists, .get_most_playlists: return "/functions/v1/playlists"
+        case .get_recent_channels, .get_most_channels: return "/functions/v1/charts/channels"
+        case .get_recent_playlists, .get_most_playlists: return "/functions/v1/charts/playlists"
         }
     }
     

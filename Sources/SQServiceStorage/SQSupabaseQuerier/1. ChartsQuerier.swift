@@ -7,10 +7,13 @@
 
 import Foundation
 
-public final class ChartsQuerier: SQSupabaseQuerier {
+public struct ChartsQuerier {
+    private let supabaseURL:URL
+    private let supabaseKey:String
     
-    public override init(supabaseURL: URL, supabaseKey: String) {
-        super.init(supabaseURL: supabaseURL, supabaseKey: supabaseKey)
+    public init(supabaseURL: URL, supabaseKey: String) {
+        self.supabaseURL = supabaseURL
+        self.supabaseKey = supabaseKey
     }
     
     public func getRecentChannels(limitCount: Int) async throws -> ChartRecentChannelsResponse {
@@ -46,6 +49,7 @@ public final class ChartsQuerier: SQSupabaseQuerier {
     public func getMostPlaylists(period: Period, date: Date, limitCount: Int)  async throws -> ChartPlaylistsResponse {
         let endPoint = ChartsEndPoint.get_most_playlists(period: period, date: date, limitcount: limitCount)
         let request = endPoint.getURLRequest(baseUrl: supabaseURL, supabaseKey: supabaseKey)
+        let (data, _ ) = try await URLSession.shared.data(for: request)
         guard let (data, _ ) = try? await URLSession.shared.data(for: request),
               let mostPlaylistsResponse = try? data.convertToTable(type: ChartPlaylistsResponse.self) else {
             throw NetworkingError.DataConvertFailed

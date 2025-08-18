@@ -6,12 +6,7 @@
 //
 
 import Foundation
-struct SqoopsLogReqeust: Encodable {
-    let id: String
-    let date: Date
-    let locale: String
-    let channelID: String
-}
+
 
 enum SqoopsEndPoint {
     case insert_log(SqoopsLogReqeust)

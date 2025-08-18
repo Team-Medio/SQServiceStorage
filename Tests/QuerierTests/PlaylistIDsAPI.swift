@@ -9,8 +9,7 @@ import Foundation
 import Testing
 @testable import SQServiceStorage
 import XCTest
-let supabaseKey: String = ""
-let supabaseURL: URL = URL(string: "hello world")!
+
 
 final class QurierTest: XCTestCase{
     let playlistQuerier = PlaylistQuerier(supabaseURL: .init(string:"")!,

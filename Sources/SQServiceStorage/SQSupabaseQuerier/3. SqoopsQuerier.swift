@@ -7,9 +7,13 @@
 
 import Foundation
 
-public final class SqoopsQurier: SQSupabaseQuerier {
-    public override init(supabaseURL: URL, supabaseKey: String) {
-        super.init(supabaseURL: supabaseURL, supabaseKey: supabaseKey)
+public struct SqoopsQurier {
+    private let supabaseURL: URL
+    private let supabaseKey: String
+    
+    public init(supabaseURL: URL, supabaseKey: String) {
+        self.supabaseKey = supabaseKey
+        self.supabaseURL = supabaseURL
     }
     
     public func appendPlaylistLog(
@@ -22,7 +26,8 @@ public final class SqoopsQurier: SQSupabaseQuerier {
         let logURLRequest = SqoopsEndPoint.insert_log(logRequestDTO)
             .getURLRequest(baseUrl: self.supabaseURL, supabaseKey: self.supabaseKey)
         guard let (_ , response) = try? await URLSession.shared.data(for: logURLRequest),
-            (response as? HTTPURLResponse)?.statusCode == 200 else {
+              (response as? HTTPURLResponse)?.statusCode == 200 else {
             throw NetworkingError.DataConvertFailed
         }
-    }}
+    }
+}
