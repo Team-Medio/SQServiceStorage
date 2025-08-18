@@ -8,7 +8,6 @@
 import Foundation
 import Supabase
 
-
 public final class PlaylistQuerier {
     var supabaseURL:URL!
     var supabaseKey:String!
@@ -25,27 +24,27 @@ public final class PlaylistQuerier {
     }
     
     
-    public func getIDsByAccessDateDESC(limit: Int = 10) async throws -> [YTPlaylistHeadDTO.ID] {
-        let recentAccessDate = PlaylistIDsRequest
-            .recent(limitcount: limit)
-            .getURLRequest(baseUrl: supabaseURL, supabaseKey: supabaseKey)
-        guard let (data, _) = try? await URLSession.shared.data(for: recentAccessDate),
-          let ids = try? data.convertToTable(type: [String].self) else {
-            throw NetworkingError.DataConvertFailed
-        }
-        return ids
-    }
+//    public func getIDsByAccessDateDESC(limit: Int = 10) async throws -> [YTPlaylistHeadDTO.ID] {
+//        let recentAccessDate = PlaylistIDsRequest
+//            .recent(limitcount: limit)
+//            .getURLRequest(baseUrl: supabaseURL, supabaseKey: supabaseKey)
+//        guard let (data, _) = try? await URLSession.shared.data(for: recentAccessDate),
+//          let ids = try? data.convertToTable(type: [String].self) else {
+//            throw NetworkingError.DataConvertFailed
+//        }
+//        return ids
+//    }
     
-    public func getIDsByWeeklyMostCountsDESC(date:Date,limit: Int = 10) async throws -> [YTPlaylistHeadDTO.ID] {
-        let mostWeeklyRequest = PlaylistIDsRequest
-            .most(period: .week, date: date, limitcount: limit)
-            .getURLRequest(baseUrl: self.supabaseURL, supabaseKey: self.supabaseKey)
-        guard let (data, _ ) = try? await URLSession.shared.data(for: mostWeeklyRequest),
-              let ids = try? data.convertToTable(type: [String].self) else {
-            throw NetworkingError.DataConvertFailed
-        }
-        return ids
-    }
+//    public func getIDsByWeeklyMostCountsDESC(date:Date,limit: Int = 10) async throws -> [YTPlaylistHeadDTO.ID] {
+//        let mostWeeklyRequest = PlaylistIDsRequest
+//            .most(period: .week, date: date, limitcount: limit)
+//            .getURLRequest(baseUrl: self.supabaseURL, supabaseKey: self.supabaseKey)
+//        guard let (data, _ ) = try? await URLSession.shared.data(for: mostWeeklyRequest),
+//              let ids = try? data.convertToTable(type: [String].self) else {
+//            throw NetworkingError.DataConvertFailed
+//        }
+//        return ids
+//    }
     
     public func appendPlaylistLog(
         playlistID: String,
@@ -53,7 +52,6 @@ public final class PlaylistQuerier {
         locale: String = Locale.current.identifier,
         channelID: String
     ) async throws {
-
         let logRequestDTO = SqoopsLogReqeust(id: playlistID, date: date, locale: locale, channelID: channelID)
         let logURLRequest = SqoopsEndPoint.insert_log(logRequestDTO)
             .getURLRequest(baseUrl: self.supabaseURL, supabaseKey: self.supabaseKey)

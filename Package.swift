@@ -23,6 +23,9 @@ let package = Package(
                 .product(name: "Supabase", package: "supabase-swift")
         ]),
         .testTarget(name: "PlaylistCahingTests", dependencies: ["SQServiceStorage"]),
-        .testTarget(name: "QuerierTests", dependencies: ["SQServiceStorage"]),
+        .testTarget(
+            name: "QuerierTests",
+            dependencies: ["SQServiceStorage"]
+        ),
     ]
 )

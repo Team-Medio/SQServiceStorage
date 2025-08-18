@@ -6,7 +6,9 @@
 //
 
 import Foundation
-enum Period:String { case week, month, year }
+
+public enum Period: String { case week, month, year }
+
 enum PlaylistIDsRequest {
     case recent(limitcount:Int), most(period:Period,date:Date,limitcount:Int)
     case sendPlaylistLog(id:String, date:Date, locale: String)
