@@ -90,7 +90,6 @@ extension PlaylistCachier {
                     data.body
                 )
             }
-            
             try await group.waitForAll()
         }
     }

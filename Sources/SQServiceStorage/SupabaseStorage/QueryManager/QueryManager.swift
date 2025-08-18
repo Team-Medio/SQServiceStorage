@@ -9,7 +9,7 @@ import Foundation
 import Supabase
 
 extension Data {
-    func convertToTable<T>(type: T.Type) throws -> T where T: Codable {
+    func convertToTable<T>(type: T.Type) throws -> T where T: Decodable {
         try JSONDecoder().decode(type, from: self)
     }
 }

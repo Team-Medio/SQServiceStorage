@@ -8,7 +8,6 @@
 import Foundation
 import Supabase
 
-
 public final class PlaylistQuerier {
     var supabaseURL:URL!
     var supabaseKey:String!
@@ -22,46 +21,6 @@ public final class PlaylistQuerier {
         self.supabaseKey = anonKey
         self.client = SupabaseClient(supabaseURL: supabaseURL, supabaseKey: supabaseKey)
         self.queryManager = QueryManager(client: client)
-    }
-    
-    
-    public func getIDsByAccessDateDESC(limit: Int = 10) async throws -> [YTPlaylistHeadDTO.ID] {
-        let recentAccessDate = PlaylistIDsRequest
-            .recent(limitcount: limit)
-            .getURLRequest(baseUrl: supabaseURL, supabaseKey: supabaseKey)
-        guard let (data, _) = try? await URLSession.shared.data(for: recentAccessDate),
-          let ids = try? data.convertToTable(type: [String].self) else {
-            throw NetworkingError.DataConvertFailed
-        }
-        return ids
-    }
-    
-    public func getIDsByWeeklyMostCountsDESC(date:Date,limit: Int = 10) async throws -> [YTPlaylistHeadDTO.ID] {
-        let mostWeeklyRequest = PlaylistIDsRequest
-            .most(period: .week, date: date, limitcount: limit)
-            .getURLRequest(baseUrl: self.supabaseURL, supabaseKey: self.supabaseKey)
-        guard let (data, _ ) = try? await URLSession.shared.data(for: mostWeeklyRequest),
-              let ids = try? data.convertToTable(type: [String].self) else {
-            throw NetworkingError.DataConvertFailed
-        }
-        return ids
-    }
-    
-    /// 여기에서 rpc 메서드 호출...
-    /// 1. 이 플리를 스쿱한 날짜를 추가함
-    /// 2. 최근 스쿱한 데이터로 추가함
-    public func appendPlaylistLog(
-        playlistID: String,
-        date: Date = Date(),
-        locale: String = Locale.current.identifier
-    ) async throws {
-        let appendLogRequest = PlaylistIDsRequest
-            .sendPlaylistLog(id: playlistID, date: date, locale: locale)
-            .getURLRequest(baseUrl: self.supabaseURL, supabaseKey: self.supabaseKey)
-        guard let (_ , response) = try? await URLSession.shared.data(for: appendLogRequest),
-            (response as? HTTPURLResponse)?.statusCode == 200 else {
-            throw NetworkingError.DataConvertFailed
-        }
     }
 
     

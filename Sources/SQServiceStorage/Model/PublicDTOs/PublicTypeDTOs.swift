@@ -19,6 +19,25 @@ public enum MusicPlatformTypeDTO: String, Codable {
 public enum YTPlaylistTypeDTO: String, Codable {
     case official = "Official"
     case video = "Video"
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        
+        switch rawValue {
+        case "Official":
+            self = .official
+        case "Video":
+            self = .video
+        default:
+            throw DecodingError.dataCorrupted(
+                DecodingError.Context(
+                    codingPath: decoder.codingPath,
+                    debugDescription: "Invalid YTPlaylistTypeDTO value: \(rawValue)"
+                )
+            )
+        }
+    }
 }
 
 public enum TotalInfoTypeDTO: Codable { 
