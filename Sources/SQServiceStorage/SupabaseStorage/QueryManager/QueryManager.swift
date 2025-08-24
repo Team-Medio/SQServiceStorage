@@ -13,6 +13,7 @@ extension Data {
         try JSONDecoder().decode(type, from: self)
     }
 }
+
 final class QueryManager {
     
     var client : SupabaseClient?
