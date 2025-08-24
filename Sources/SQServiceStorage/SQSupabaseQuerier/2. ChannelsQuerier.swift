@@ -16,11 +16,13 @@ public struct ChannelsQuerier {
         self.supabaseKey = supabaseKey
     }
     
-    public func getPlaylists(channelID: String, limitCount: Int) async throws -> ChannelPlaylistsResposne {
+    public func getPlaylists(channelID: String, limitCount: Int) async throws -> [ChannelPlaylistsResponse] {
         let endPoint = ChannelsEndPoint.playlists(channelID: channelID, limitCount: limitCount)
         let request = endPoint.getURLRequest(baseUrl: self.supabaseURL, supabaseKey: self.supabaseKey)
-        guard let (data, _ ) = try? await URLSession.shared.data(for: request),
-              let channelPlaylistsResponse = try? data.convertToTable(type: ChannelPlaylistsResposne.self) else {
+        guard let (data, _ ) = try? await URLSession.shared.data(for: request) else {
+            throw NetworkingError.DataConvertFailed
+        }
+          guard let channelPlaylistsResponse = try? data.convertToTable(type: [ChannelPlaylistsResponse].self) else {
             throw NetworkingError.DataConvertFailed
         }
         return channelPlaylistsResponse
