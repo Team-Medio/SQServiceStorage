@@ -13,9 +13,10 @@ struct YTPlaylistHeadTable: Codable {
     let title:String
     var channelID: String
     let thumbnailURLString: String
-    let insertedDate:Date
+    let insertedDate: Date
     let isShazamed: Bool
     let playlistType: YTPlaylistTypeDTO.RawValue
+    
     init(id: String,
          originURL: String,
          title: String,
@@ -42,12 +43,13 @@ struct YTPlaylistHeadTable: Codable {
         self.thumbnailURLString = try container.decode(String.self, forKey: .thumbnailURLString)
         let date = try container.decode(String.self, forKey: .insertedDate)
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssXXX"
-        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-        guard let insertedDate = dateFormatter.date(from: date) else {
-            throw PlaylistCachierError.dateConvertFailed
-        }
+        let customFormat = Date.ISO8601FormatStyle(
+            includingFractionalSeconds: false,
+            timeZone: .autoupdatingCurrent
+        )
+        let insertedDate = try customFormat.parseStrategy.parse(date)
         self.insertedDate = insertedDate
+        
         self.isShazamed = try container.decode(Bool.self, forKey: .isShazamed)
         self.playlistType = try container.decode(YTPlaylistTypeDTO.RawValue.self, forKey: .playlistType)
     }

@@ -26,7 +26,7 @@ extension PlaylistCachier {
                       idx: idx,
                       ISRC: val.isrc)
         }
-        let totalInfo = switch playlistData.totalInfo {
+        let totalInfo: Int = switch playlistData.totalInfo {
             case .duration(let info), .length(let info): info
         }
         
@@ -61,7 +61,7 @@ extension PlaylistCachier {
     }
     /// 메타 데이터와 플리 데이터를 같이 넣는 메서드
     public func upsertPlaylist(_ data: YTPlaylistDTO) async throws {
-        guard let client else{ throw PlaylistCachierError.clientKeyNotEntered }
+        guard let client else { throw PlaylistCachierError.clientKeyNotEntered }
 
         let headData: YTPlaylistHeadDTO = data.head
         let headDataTable = YTPlaylistHeadTable(headDTO: headData)
@@ -82,17 +82,13 @@ extension PlaylistCachier {
             group.addTask {
                 try await client.ytChannelInfoTable.upsert(channelInfo).execute()
             }
+            
             group.addTask {
                 // 전체 플레이리스트 테이블 upsert
                 try await self.insertPlaylistData(
                     metaDataID: data.head.id,
                     data.body
                 )
-            }
-            group.addTask {
-                try await client.metadataAccessDate
-                    .upsert(PlaylistHeadAccessDateTable(id: data.head.id))
-                    .execute()
             }
             try await group.waitForAll()
         }

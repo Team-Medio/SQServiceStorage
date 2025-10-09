@@ -13,8 +13,9 @@ public struct YTPlaylistDTO {
     public let body: YTPlaylistBodyDTO
     
     /// 메타데이터와 PlaylistData 둘 존재하는 경우 사용합니다.
-    public init(head: YTPlaylistHeadDTO,
-                body: YTPlaylistBodyDTO
+    public init(
+        head: YTPlaylistHeadDTO,
+        body: YTPlaylistBodyDTO
     ) {
         self.head = head
         self.body = body

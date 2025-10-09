@@ -8,7 +8,6 @@
 import Foundation
 import Supabase
 
-
 public final class PlaylistQuerier {
     var supabaseURL:URL!
     var supabaseKey:String!
@@ -22,41 +21,6 @@ public final class PlaylistQuerier {
         self.supabaseKey = anonKey
         self.client = SupabaseClient(supabaseURL: supabaseURL, supabaseKey: supabaseKey)
         self.queryManager = QueryManager(client: client)
-    }
-    
-    
-    public func getIDsByAccessDateDESC(limit: Int = 10) async throws -> [YTPlaylistHeadDTO.ID] {
-        let recentAccessDate = PlaylistIDsRequest
-            .recent(limitcount: limit)
-            .getURLRequest(baseUrl: supabaseURL, supabaseKey: supabaseKey)
-        guard let (data, _) = try? await URLSession.shared.data(for: recentAccessDate),
-          let ids = try? data.convertToTable(type: [String].self) else {
-            throw NetworkingError.DataConvertFailed
-        }
-        return ids
-    }
-    
-    public func getIDsByWeeklyMostCountsDESC(date:Date,limit: Int = 10) async throws -> [YTPlaylistHeadDTO.ID] {
-        let mostWeeklyRequest = PlaylistIDsRequest
-            .most(period: .week, date: date, limitcount: limit)
-            .getURLRequest(baseUrl: self.supabaseURL, supabaseKey: self.supabaseKey)
-        guard let (data, _ ) = try? await URLSession.shared.data(for: mostWeeklyRequest),
-              let ids = try? data.convertToTable(type: [String].self) else {
-            throw NetworkingError.DataConvertFailed
-        }
-        return ids
-    }
-    
-    public func appendPlaylistLog(playlistID: String,
-                                  date: Date = Date(),
-                                  locale: String = Locale.current.identifier) async throws {
-        let appendLogRequest = PlaylistIDsRequest
-            .sendPlaylistLog(id: playlistID, date: date, locale: locale)
-            .getURLRequest(baseUrl: self.supabaseURL, supabaseKey: self.supabaseKey)
-        guard let (_ , response) = try? await URLSession.shared.data(for: appendLogRequest),
-            (response as? HTTPURLResponse)?.statusCode == 200 else {
-            throw NetworkingError.DataConvertFailed
-        }
     }
 
     
@@ -81,11 +45,13 @@ public final class PlaylistQuerier {
         return try await client.rpc( RPCFunctionType.getTotalSongsCount.rawValue)
             .convertToTable(type: Int.self)
     }
+    
     public func getTotalPlaylistsCount() async throws -> Int {
         guard let client = client else { throw PlaylistCachierError.clientKeyNotEntered }
         return try await client.rpc( RPCFunctionType.getTotalPlaylistsCount.rawValue)
             .convertToTable(type: Int.self)
     }
+    
     public func getIsShazamed(id: String) async throws -> Bool {
         guard let client = client else { throw PlaylistCachierError.clientKeyNotEntered }
         return try await client.rpc(
