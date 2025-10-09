@@ -25,8 +25,8 @@ public struct SqoopsQuerier {
         let logRequestDTO = SqoopsLogRequest(id: playlistID, date: date, locale: locale, channelID: channelID)
         let logURLRequest = SqoopsEndPoint.insert_log(logRequestDTO)
             .getURLRequest(baseUrl: self.supabaseURL, supabaseKey: self.supabaseKey)
-        guard let (_ , response) = try? await URLSession.shared.data(for: logURLRequest),
-              (response as? HTTPURLResponse)?.statusCode == 200 else {
+        let (data, response) = try await URLSession.shared.data(for: logURLRequest)
+        guard (response as? HTTPURLResponse)?.statusCode == 200 else {
             throw NetworkingError.DataConvertFailed
         }
     }
