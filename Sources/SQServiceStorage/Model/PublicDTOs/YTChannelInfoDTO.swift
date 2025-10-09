@@ -11,7 +11,7 @@ public struct YTChannelInfoDTO: Codable {
     public let id: String
     public let name: String
     public var subscribers: Int = 0
-    public var thumbnailURLString: String = ""
+    public var thumbnailURLString: String
     
     public init(
         id: String,
@@ -21,6 +21,8 @@ public struct YTChannelInfoDTO: Codable {
     ) {
         self.id = id
         self.name = name
+        self.subscribers = subscribers
+        self.thumbnailURLString = thumbnailURLString
     }
     
 }
